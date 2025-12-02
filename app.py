@@ -102,6 +102,15 @@ def show_main_screen(main_frame):
         relief="solid"
     )
     output_box.pack(padx=20, pady=(0, 20))
+    
+    # Signature label
+    tk.Label(
+        main,
+        text="Made by Misha",
+        font=("Helvetica Neue", 15, "italic"),
+        fg="black",
+        bg="#F8F8F5"
+    ).pack(pady=(0, 10))
 
 # Saved Notes Page
 def show_saved_notes(main_frame):

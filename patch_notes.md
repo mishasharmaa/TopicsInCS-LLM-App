@@ -668,3 +668,29 @@ This critical foundational release focuses heavily on enhanced security and appl
 
 ### Infrastructure / Internal
 • None.
+
+[TOOL] fetch_time
+## Version 2025.12.02.1 (December 02, 2025 — 06:06:42 PM)
+### Summary
+This maintenance release focuses primarily on restoring core application stability and optimizing initial content loading. We have addressed a critical startup crash and introduced key quality of life features, including a new guided onboarding experience for all users.
+
+### Breaking Changes
+• None.
+
+### Security
+• None.
+
+### Performance
+• Optimization applied to the core image pipeline, resulting in significantly faster content loading times within the application.
+
+### Stability & Bug Fixes
+• Resolved a critical issue that caused the application to unexpectedly terminate upon initialization for certain users. Stability on startup is now guaranteed.
+
+### User Interface / UX
+• Applied visual polish and refinement to the Settings menu structure for improved navigation and readability.
+
+### Quality of Life
+• Introduced a comprehensive onboarding tutorial sequence designed to guide new users through essential application features and setup steps.
+
+### Infrastructure / Internal
+• None.
