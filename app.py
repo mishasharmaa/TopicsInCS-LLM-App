@@ -4,11 +4,11 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 import time
-from datetime import datetime   
+from datetime import datetime
 from guardrails import system_prompt, is_prompt_injection, length_guard
 from tools import get_version_and_date
 from telemetry import log_request
-from external_api import fetch_current_time  
+from external_api import fetch_current_time
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -16,11 +16,6 @@ model = genai.GenerativeModel("gemini-flash-latest")
 
 
 def safe_extract_text(response):
-    """
-    Extracts text safely from Gemini Flash responses, even when
-    no .text part exists (tool call, safety block, etc.).
-    """
-  
     try:
         return response.text.strip()
     except Exception:
@@ -39,7 +34,119 @@ def safe_extract_text(response):
     except:
         pass
 
-    return "" 
+    return ""
+
+def clear_frame(frame):
+    for widget in frame.winfo_children():
+        widget.destroy()
+
+
+def show_main_screen(main_frame):
+    clear_frame(main_frame)
+
+    tk.Label(
+        main_frame,
+        text="Your Bullet Notes:",
+        font=("Helvetica Neue", 17, "bold"),
+        fg="black",
+        bg="#F8F8F5"
+    ).pack(anchor="w", padx=20, pady=(20, 5))
+
+    input_box = scrolledtext.ScrolledText(
+        main_frame,
+        width=120, height=10,
+        font=("Helvetica Neue", 14),
+        bg="#F8F8F5",
+        fg="black",
+        insertbackground="black",
+        borderwidth=2,
+        relief="solid"
+    )
+    input_box.pack(padx=20)
+
+    # Generate Button
+    global output_box
+    generate_btn = tk.Button(
+        main_frame,
+        text="Generate Patch Notes",
+        font=("Helvetica Neue", 14, "bold"),
+        bg="black",
+        fg="black",
+        activebackground="#000000",
+        activeforeground="white",
+        width=28,
+        height=2,
+        borderwidth=3,
+        relief="raised",
+        command=lambda: generate_patch_notes(input_box.get("1.0", tk.END), output_box)
+    )
+    generate_btn.pack(pady=20)
+
+    tk.Label(
+        main_frame,
+        text="Generated Output:",
+        font=("Helvetica Neue", 17, "bold"),
+        fg="black",
+        bg="#F8F8F5"
+    ).pack(anchor="w", padx=20, pady=(0, 5))
+
+    output_box = scrolledtext.ScrolledText(
+        main_frame,
+        width=120,
+        height=15,
+        font=("Helvetica Neue", 14),
+        bg="white",
+        fg="black",
+        insertbackground="black",
+        borderwidth=2,
+        relief="solid"
+    )
+    output_box.pack(padx=20, pady=(0, 20))
+
+# Saved Notes Page
+def show_saved_notes(main_frame):
+    clear_frame(main_frame)
+
+    # Link back to the main page
+    back_label = tk.Label(
+        main_frame,
+        text="← Back to Generator",
+        font=("Helvetica Neue", 14, "underline", "bold"),
+        fg="black",
+        bg="#F8F8F5",
+        cursor="arrow"
+    )
+    back_label.pack(anchor="w", padx=20, pady=(20, 5))
+    back_label.bind("<Button-1>", lambda e: show_main_screen(main_frame))
+
+    tk.Label(
+        main_frame,
+        text="Saved Patch Notes",
+        font=("Helvetica Neue", 20, "bold"),
+        fg="black",
+        bg="#F8F8F5"
+    ).pack(pady=10)
+
+    notes_box = scrolledtext.ScrolledText(
+        main_frame,
+        width=120,
+        height=30,
+        font=("Helvetica Neue", 13),
+        bg="white",
+        fg="black",
+        borderwidth=2,
+        relief="solid"
+    )
+    notes_box.pack(padx=20, pady=10)
+
+    try:
+        with open("patch_notes.md", "r") as f:
+            notes_box.insert(tk.END, f.read())
+    except FileNotFoundError:
+        notes_box.insert(tk.END, "No saved notes found.")
+
+    notes_box.config(state="disabled")
+
 
 def generate_patch_notes(user_text, output_box):
     if not length_guard(user_text):
@@ -68,43 +175,38 @@ def generate_patch_notes(user_text, output_box):
     response = model.generate_content(full_prompt)
     latency = time.time() - start
 
-    # SAFELY extract model text
     text = safe_extract_text(response)
 
-   
-    if text.strip() == "[TOOL] fetch_time" or "[TOOL] fetch_time" in text: # detecting the tool use
+    # TOOL USE
+    if text.strip() == "[TOOL] fetch_time" or "[TOOL] fetch_time" in text:
 
         api_time = fetch_current_time()
-
-        # Log tool use
         log_request("tool", latency, response.usage_metadata.total_token_count)
 
+        
+        output_box.delete("1.0", tk.END)
+
         if api_time is None:
-            output_box.delete("1.0", tk.END)
             output_box.insert(tk.END, "Tool Error: Could not fetch real datetime.\n")
             return
 
-        # Convert to real date and 12-hour time
         try:
             real_dt = datetime.fromisoformat(api_time.replace("Z", "+00:00"))
-            real_date_str = real_dt.strftime("%B %d, %Y")
-            real_time_str = real_dt.strftime("%I:%M:%S %p")  # 12-hour time
+            real_date_str = real_dt.strftime("%B %d, %Y") # real date in "Month Day, Year"
+            real_time_str = real_dt.strftime("%I:%M:%S %p") # real time in 12-hour AM/PM
         except Exception:
             real_date_str = api_time
             real_time_str = ""
 
-    
         followup_prompt = (
             system_prompt()
-            + f"\nTool Result Datetime: {api_time}\n"
-            + f"Real Date: {real_date_str}\n"
-            + f"Real Time: {real_time_str}\n"
+            + "\nFetched real-world datetime (using tool):\n"
+            + f"{real_date_str} — {real_time_str}\n\n"
             + f"User Bullets:\n{user_text}\n"
         )
 
         follow_response = model.generate_content(followup_prompt)
         final_text = safe_extract_text(follow_response)
-
         output_box.delete("1.0", tk.END)
         output_box.insert(tk.END, final_text)
 
@@ -122,13 +224,12 @@ def generate_patch_notes(user_text, output_box):
         f.write("\n\n" + text)
 
 
+# Building the GUI 
 def build_gui():
     root = tk.Tk()
     root.title("Patch Notes Writer")
     root.geometry("1200x800")
     root.configure(bg="#F8F8F5")
-
-    # Sidebar
     sidebar = tk.Frame(root, bg="#E308AD", width=220)
     sidebar.pack(side="left", fill="y")
 
@@ -148,74 +249,25 @@ def build_gui():
         bg="#E308AD"
     ).pack(pady=10)
 
-    # Main area
+    
+    view_label = tk.Label(
+        sidebar,
+        text="View Saved Notes",
+        font=("Helvetica Neue", 14, "underline", "bold"),
+        fg="black",
+        bg="#E308AD",
+        cursor="arrow"
+    )
+    view_label.pack(pady=25)
+    view_label.bind("<Button-1>", lambda e: show_saved_notes(main))
+
+    # main page
+    global main
     main = tk.Frame(root, bg="#F8F8F5")
     main.pack(side="right", fill="both", expand=True)
 
-    tk.Label(
-        main,
-        text="Your Bullet Notes:",
-        font=("Helvetica Neue", 17, "bold"),
-        fg="black",
-        bg="#F8F8F5"
-    ).pack(anchor="w", padx=20, pady=(20, 5))
-
-    # Text input box
-    input_box = scrolledtext.ScrolledText(
-        main,
-        width=120, height=10,
-        font=("Helvetica Neue", 14),
-        bg="#F8F8F5",
-        fg="black",
-        insertbackground="black",
-        borderwidth=2,
-        relief="solid"
-    )
-    input_box.pack(padx=20)
-
-    # Button 
-    generate_btn = tk.Button(
-        main,
-        text="Generate Patch Notes",
-        font=("Helvetica Neue", 14, "bold"),
-        bg="black",
-        fg="black",
-        activebackground="#000000",
-        activeforeground="white",
-        width=28,
-        height=2,
-        borderwidth=3,
-        relief="raised",
-        command=lambda: generate_patch_notes(input_box.get("1.0", tk.END), output_box)
-    )
-    generate_btn.pack(pady=20)
-
-    generate_btn.configure(disabledforeground="#777777")
-
-    tk.Label(
-        main,
-        text="Generated Output:",
-        font=("Helvetica Neue", 17, "bold"),
-        fg="black",
-        bg="#F8F8F5"
-    ).pack(anchor="w", padx=20, pady=(0, 5))
-
-    # Output box
-    output_box = scrolledtext.ScrolledText(
-        main,
-        width=120,
-        height=15,
-        font=("Helvetica Neue", 14),
-        bg="white",
-        fg="black",
-        insertbackground="black",
-        borderwidth=2,
-        relief="solid"
-    )
-    output_box.pack(padx=20, pady=(0, 20))
-
+    show_main_screen(main)
     root.mainloop()
-
 
 if __name__ == "__main__":
     build_gui()
