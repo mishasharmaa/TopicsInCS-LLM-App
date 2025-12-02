@@ -4,35 +4,28 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 import time
-from datetime import datetime   # <-- needed for real 12-hour time
-
+from datetime import datetime   
 from guardrails import system_prompt, is_prompt_injection, length_guard
 from tools import get_version_and_date
 from telemetry import log_request
-from external_api import fetch_current_time  # <-- TOOL USE
+from external_api import fetch_current_time  
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-# Modern model
 model = genai.GenerativeModel("gemini-flash-latest")
 
 
-# ---------------------------------------
-# SAFE TEXT EXTRACTOR FOR GEMINI FLASH
-# ---------------------------------------
 def safe_extract_text(response):
     """
     Extracts text safely from Gemini Flash responses, even when
     no .text part exists (tool call, safety block, etc.).
     """
-    # Try simple access
+  
     try:
         return response.text.strip()
     except Exception:
         pass
 
-    # Try parsing candidates manually
     try:
         if hasattr(response, "candidates"):
             parts = []
@@ -46,12 +39,8 @@ def safe_extract_text(response):
     except:
         pass
 
-    return ""  # Fallback when no text at all
+    return "" 
 
-
-# ---------------------------------------
-# PATCH-NOTE GENERATION
-# ---------------------------------------
 def generate_patch_notes(user_text, output_box):
     if not length_guard(user_text):
         output_box.insert(tk.END, "Error: Input too long.\n")
@@ -82,10 +71,8 @@ def generate_patch_notes(user_text, output_box):
     # SAFELY extract model text
     text = safe_extract_text(response)
 
-    # ---------------------------------------
-    # TOOL CALL CHECK
-    # ---------------------------------------
-    if text.strip() == "[TOOL] fetch_time" or "[TOOL] fetch_time" in text:
+   
+    if text.strip() == "[TOOL] fetch_time" or "[TOOL] fetch_time" in text: # detecting the tool use
 
         api_time = fetch_current_time()
 
@@ -97,9 +84,7 @@ def generate_patch_notes(user_text, output_box):
             output_box.insert(tk.END, "Tool Error: Could not fetch real datetime.\n")
             return
 
-        # ---------------------------------------------
-        # Format REAL date + REAL time (12-hour format)
-        # ---------------------------------------------
+        # Convert to real date and 12-hour time
         try:
             real_dt = datetime.fromisoformat(api_time.replace("Z", "+00:00"))
             real_date_str = real_dt.strftime("%B %d, %Y")
@@ -108,9 +93,7 @@ def generate_patch_notes(user_text, output_box):
             real_date_str = api_time
             real_time_str = ""
 
-        # ---------------------------------------------
-        # Follow-up prompt once tool result is ready
-        # ---------------------------------------------
+    
         followup_prompt = (
             system_prompt()
             + f"\nTool Result Datetime: {api_time}\n"
@@ -130,9 +113,6 @@ def generate_patch_notes(user_text, output_box):
 
         return
 
-    # ---------------------------------------
-    # NO TOOL → NORMAL FLOW
-    # ---------------------------------------
     log_request("none", latency, response.usage_metadata.total_token_count)
 
     output_box.delete("1.0", tk.END)
@@ -142,16 +122,13 @@ def generate_patch_notes(user_text, output_box):
         f.write("\n\n" + text)
 
 
-# ---------------------------------------
-# GUI: UNCHANGED
-# ---------------------------------------
 def build_gui():
     root = tk.Tk()
     root.title("Patch Notes Writer")
     root.geometry("1200x800")
     root.configure(bg="#F8F8F5")
 
-    # SIDEBAR 
+    # Sidebar
     sidebar = tk.Frame(root, bg="#FFE7A0", width=220)
     sidebar.pack(side="left", fill="y")
 
@@ -171,7 +148,7 @@ def build_gui():
         bg="#FFE7A0"
     ).pack(pady=10)
 
-    # MAIN AREA 
+    # Main area
     main = tk.Frame(root, bg="#F8F8F5")
     main.pack(side="right", fill="both", expand=True)
 
