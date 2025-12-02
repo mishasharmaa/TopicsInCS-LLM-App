@@ -129,7 +129,7 @@ def build_gui():
     root.configure(bg="#F8F8F5")
 
     # Sidebar
-    sidebar = tk.Frame(root, bg="#FFE7A0", width=220)
+    sidebar = tk.Frame(root, bg="#E308AD", width=220)
     sidebar.pack(side="left", fill="y")
 
     tk.Label(
@@ -137,7 +137,7 @@ def build_gui():
         text="Patch Notes",
         font=("Helvetica Neue", 22, "bold"),
         fg="black",
-        bg="#FFE7A0"
+        bg="#E308AD"
     ).pack(pady=20)
 
     tk.Label(
@@ -145,7 +145,7 @@ def build_gui():
         text="Enter bullet points\non the right →",
         font=("Helvetica Neue", 13),
         fg="black",
-        bg="#FFE7A0"
+        bg="#E308AD"
     ).pack(pady=10)
 
     # Main area
@@ -165,7 +165,7 @@ def build_gui():
         main,
         width=120, height=10,
         font=("Helvetica Neue", 14),
-        bg="white",
+        bg="#F8F8F5",
         fg="black",
         insertbackground="black",
         borderwidth=2,
@@ -180,7 +180,7 @@ def build_gui():
         font=("Helvetica Neue", 14, "bold"),
         bg="black",
         fg="black",
-        activebackground="#333333",
+        activebackground="#000000",
         activeforeground="white",
         width=28,
         height=2,
