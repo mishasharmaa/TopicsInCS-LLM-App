@@ -2,7 +2,7 @@
 
 A desktop application that converts bullet-point updates into structured,
 professional patch notes using Google's Gemini Flash model. It features tool use, where real date and real time is shown every time a user generates a new notes. This helps a user track their notes that are automatically saved to 'patch_notes.md'
----
+
 ## Features
 - GUI built with Tkinter (Apple Notes-inspired UI)
 - LLM-powered patch note generation
