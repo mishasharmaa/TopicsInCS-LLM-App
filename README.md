@@ -15,7 +15,7 @@ professional patch notes using Google's Gemini Flash model. It features tool use
 ## Installation
 
 ### 1. Clone repository
-git clone <your-repo-url>
+git clone '<your-repo-url>'
 
 ### 2. Install dependencies
 pip install -r requirements.txt
