@@ -8,7 +8,7 @@ professional patch notes using Google's Gemini Flash model. It features tool use
 - LLM-powered patch note generation
 - Versioning system (semantic + date-based)
 - Safety guardrails (prompt injection detection, length limits)
-- Automated telemetry logging
+- Automated telemetry logging (telemetry.log)
 - Test suite (tests.json)
 - Enhancement: TOOL-USE (real date and real time shown)
 
