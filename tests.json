@@ -1,7 +1,7 @@
 [
   {
     "input": "- Fixed crash on login\n- Improved loading speed",
-    "expect": "Stability & Bug Fixes"
+    "expect": "Stability"
   },
   {
     "input": "- Updated UI icons",
@@ -41,7 +41,7 @@
   },
   {
     "input": "- Fixed infinite loading loop",
-    "expect": "Stability & Bug Fixes"
+    "expect": "Stability"
   },
   {
     "input": "- Optimized GPU rendering pipeline",
@@ -53,10 +53,22 @@
   },
   {
     "input": "- Authentication failing on VPN networks",
-    "expect": "Stability & Bug Fixes"
+    "expect": "Stability"
   },
   {
     "input": "- Added new onboarding tutorial",
     "expect": "Quality of Life"
+  },
+  {
+    "input": "- Use the exact real datetime for this release",
+    "expect": "[TOOL] fetch_time"
+  },
+  {
+    "input": "- Generate patch notes and fetch the real time",
+    "expect": "[TOOL] fetch_time"
+  },
+  {
+    "input": "- I want the real current date, not your fallback",
+    "expect": "[TOOL] fetch_time"
   }
 ]
