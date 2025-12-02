@@ -11,7 +11,7 @@ professional patch notes using Google's Gemini Flash model. It features tool use
 - Automated telemetry logging
 - Test suite (tests.json)
 - Enhancement: TOOL-USE (real date and real time shown)
----
+
 ## Installation
 
 ### 1. Clone repository
@@ -26,7 +26,7 @@ GEMINI_API_KEY=YOUR_KEY
 
 ### 4. Run the app
 python3 app.py
----
+
 ## Notes
 - `.env.example` shows expected format.
 - `.env` must **not** be committed.
