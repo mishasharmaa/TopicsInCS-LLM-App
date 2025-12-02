@@ -11,7 +11,7 @@ professional patch notes using Google's Gemini Flash model. It features tool use
 - Automated telemetry logging (telemetry.log)
 - Test suite (tests.json)
 - Enhancement: TOOL-USE (real date and real time shown)
-- Saved Notes page showing the user previous notes
+- Saved Notes page showing the users previous notes
 
 ## Installation
 
