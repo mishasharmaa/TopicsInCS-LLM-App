@@ -3,7 +3,7 @@ import subprocess
 
 def run_test(bullets):
     p = subprocess.Popen(
-        ["python3", "app.py", "--nogui"],
+        ["python3", "app.py"],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
