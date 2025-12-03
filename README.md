@@ -14,7 +14,7 @@ professional patch notes using Google's Gemini Flash model. It features tool use
 - Saved Notes page showing the users previous notes
 
 ## Chosen Enhancement
-My chosen enchancement is tool use. When the model needs accurate time and date, it calls a tool instead of using a local date. My model print has a tool-call token `[TOOL] fetch_time`, my backend detects this, calls `external_api.py,` which triggers either the WorldTimeAPI or TimeAPI, and then sends the real time datetime to the model. Finally, the model printsout the real date and real 24 hour time in the header. 
+My chosen enchancement is **tool use**. When the model needs accurate time and date, it calls a tool instead of using a local date. My model print has a tool-call token `[TOOL] fetch_time`, my backend detects this, calls `external_api.py,` which triggers either the WorldTimeAPI or TimeAPI, and then sends the real time datetime to the model. Finally, the model printsout the real date and real 24 hour time in the header. 
 
 In `external_api.py`: 
 
@@ -41,6 +41,9 @@ real_date_str = real_dt.strftime("%B %d, %Y") # real date in "Month Day, Year"
 real_time_str = real_dt.strftime("%I:%M:%S %p") # real time in 12-hour AM/PM
 ```
 This line is where I format into 12-hour time and pass it back to the model. 
+
+## Running eval.py
+To print out the pass rate of the app, run `python3 eval.py.` Sometimes the passing rate is 15/18 or 16/18 and sometime it can be 2/18 or 4/18. 
 
 ## Installation
 

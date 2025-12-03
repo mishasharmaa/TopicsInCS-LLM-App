@@ -9,6 +9,8 @@ from guardrails import system_prompt, is_prompt_injection, length_guard
 from tools import get_version_and_date
 from telemetry import log_request
 from external_api import fetch_current_time
+import sys
+
 
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
@@ -279,4 +281,23 @@ def build_gui():
     root.mainloop()
 
 if __name__ == "__main__":
-    build_gui()
+    if "--nogui" in sys.argv:
+        # headless evaluation mode
+        bullets = sys.stdin.read()
+        class DummyBox:
+            def __init__(self):
+                self.text = ""
+            def insert(self, _, msg):
+                self.text += msg
+            def delete(self, *args):
+                self.text = ""
+            def update(self): 
+                pass
+
+        dummy = DummyBox()
+        generate_patch_notes(bullets, dummy)
+        print(dummy.text)
+
+    else:
+        build_gui()
+
