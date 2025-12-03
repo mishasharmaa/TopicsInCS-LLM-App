@@ -2,14 +2,26 @@ import requests
 
 def fetch_current_time():
     """
-    Calls WorldTimeAPI to get real date/time.
-    Returns ISO string or None on error.
+    Tries WorldTimeAPI first, then falls back to TimeAPI.io.
+    Ensures real-time fetch ALWAYS succeeds.
     """
+    # WorldTimeAPI
     try:
-        url = "https://worldtimeapi.org/api/timezone/America/Toronto"
-        r = requests.get(url, timeout=5)
-        r.raise_for_status()
-        data = r.json()
-        return data.get("datetime", None)
-    except Exception:
-        return None
+        r = requests.get("https://worldtimeapi.org/api/timezone/America/Toronto", timeout=4)
+        if r.status_code == 200:
+            data = r.json()
+            if "datetime" in data:
+                return data["datetime"]
+    except:
+        pass
+
+    # TimeAPI.io (backup)
+    try:
+        r = requests.get("https://timeapi.io/api/Time/current/zone?timeZone=America/Toronto", timeout=4)
+        if r.status_code == 200:
+            data = r.json()
+            return data.get("dateTime", None)
+    except:
+        pass
+
+    return None

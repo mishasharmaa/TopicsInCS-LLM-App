@@ -694,3 +694,78 @@ This maintenance release focuses primarily on restoring core application stabili
 
 ### Infrastructure / Internal
 • None.
+
+## Version 2025.12.02.1 (December 02, 2025 — 06:58:13 PM)
+### Summary
+This minor release delivers crucial improvements focused on application stability and core user experience. We have resolved a critical crash affecting startup and introduced a new introductory guide for first-time users. Additionally, performance optimizations have been applied to enhance asset rendering speed.
+
+### Breaking Changes
+• None.
+
+### Security
+• None.
+
+### Performance
+• Significantly enhanced the speed and efficiency of image asset loading across the application.
+
+### Stability & Bug Fixes
+• Resolved a critical issue causing immediate application termination upon launch.
+
+### User Interface / UX
+• Applied minor visual refinements and accessibility tweaks to the Settings Configuration panel.
+
+### Quality of Life
+• Implemented a comprehensive new tutorial to guide first-time users through core application features.
+
+### Infrastructure / Internal
+• None.
+
+## Version 2025.12.02.1 (December 02, 2025 — 07:02:25 PM)
+### Summary
+This release focuses on maintaining core system stability and ensuring all internal infrastructure remains up-to-date and ready for future development cycles. This update contains no external feature changes.
+
+### Breaking Changes
+• None.
+
+### Security
+• None.
+
+### Performance
+• None.
+
+### Stability & Bug Fixes
+• None.
+
+### User Interface / UX
+• None.
+
+### Quality of Life
+• None.
+
+### Infrastructure / Internal
+• None.
+
+## Version 2025.12.02.1 (December 02, 2025 — 07:02:57 PM)
+### Summary
+This maintenance release focuses primarily on organizational structure and ensuring robust preparation for upcoming feature cycles. No significant feature changes or user-facing adjustments were deployed in this version, maintaining current stability across the platform.
+
+### Breaking Changes
+• N/A
+
+### Security
+• N/A
+
+### Performance
+• N/A
+
+### Stability & Bug Fixes
+• N/A
+
+### User Interface / UX
+• N/A
+
+### Quality of Life
+• N/A
+
+### Infrastructure / Internal
+• Updated internal logging mechanisms to explicitly stamp all release metadata with the real-time date and time of deployment, improving auditability and adherence to internal CI/CD standards.
