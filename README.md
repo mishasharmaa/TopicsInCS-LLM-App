@@ -17,6 +17,7 @@ professional patch notes using Google's Gemini Flash model. It features tool use
 My chosen enchancement is tool use. When the model needs accurate time and date, it calls a tool instead of using a local date. My model print has a tool-call token `[TOOL] fetch_time`, my backend detects this, calls `external_api.py,` which triggers either the WorldTimeAPI or TimeAPI, and then sends the real time datetime to the model. Finally, the model printsout the real date and real 24 hour time in the header. 
 
 In `external_api.py`: 
+
 def fetch_current_time():
     try:
         r = requests.get("https://worldtimeapi.org/api/timezone/America/Toronto", timeout=4)`
