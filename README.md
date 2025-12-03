@@ -31,4 +31,5 @@ python3 app.py
 ## Notes
 - `.env.example` shows expected format.
 - `.env` must **not** be committed.
+- To view mp4 video, press 'view raw' and it will download it to your computer
 
