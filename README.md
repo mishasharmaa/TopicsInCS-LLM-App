@@ -57,6 +57,15 @@ GEMINI_API_KEY=YOUR_KEY
 ### 4. Run the app
 python3 app.py
 
+## Google API Key 
+
+1. Go to 'https://aistudio.google.com/welcome'
+2. Use your personal email to login 
+3. Press 'View API Keys' 
+4. Press 'Create API Key'
+5. Name your key and select 'Default Gemini Project' 
+6. Select create key
+
 ## Notes
 - `.env.example` shows expected format.
 - `.env` must **not** be committed.
