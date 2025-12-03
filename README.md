@@ -43,7 +43,7 @@ real_time_str = real_dt.strftime("%I:%M:%S %p") # real time in 12-hour AM/PM
 This line is where I format into 12-hour time and pass it back to the model. 
 
 ## Running eval.py
-To print out the pass rate of the app, run `python3 eval.py.` Sometimes the passing rate is 15/18 or 16/18 and sometime it can be 2/18 or 4/18. 
+To print out the passing rate of the app, run `python3 eval.py.` Sometimes the passing rate is 15/18 or 16/18 and sometime it can be 2/18 or 4/18. 
 
 ## Installation
 
