@@ -27,8 +27,11 @@ def fetch_current_time():
         return data.get("datetime")
     except Exception:
         return None
-```
 
+def fetch_current_time():
+    try:
+        r = requests.get("https://timeapi.io/api/Time/current/zone?timeZone=America/Toronto", timeout=4)
+```
 
 
 ## Installation
