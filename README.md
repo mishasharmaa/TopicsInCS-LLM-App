@@ -18,9 +18,17 @@ My chosen enchancement is tool use. When the model needs accurate time and date,
 
 In `external_api.py`: 
 
+```python
 def fetch_current_time():
     try:
-        r = requests.get("https://worldtimeapi.org/api/timezone/America/Toronto", timeout=4)`
+        r = requests.get("https://worldtimeapi.org/api/timezone/America/Toronto", timeout=4)
+        r.raise_for_status()
+        data = r.json()
+        return data.get("datetime")
+    except Exception:
+        return None
+```
+
 
 
 ## Installation
