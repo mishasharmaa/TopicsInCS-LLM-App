@@ -22,17 +22,25 @@ In `external_api.py`:
 def fetch_current_time():
     try:
         r = requests.get("https://worldtimeapi.org/api/timezone/America/Toronto", timeout=4)
-        r.raise_for_status()
-        data = r.json()
-        return data.get("datetime")
-    except Exception:
-        return None
-
-def fetch_current_time():
+        
     try:
         r = requests.get("https://timeapi.io/api/Time/current/zone?timeZone=America/Toronto", timeout=4)
 ```
+These lines calls the external APIs to fetch live date and time. 
 
+In `app.py`:
+
+```python
+if text.strip() == "[TOOL] fetch_time" or "[TOOL] fetch_time" in text:
+        api_time = fetch_current_time()
+```
+This line is where I detect the tool call and fetch the real time. 
+
+```python 
+real_date_str = real_dt.strftime("%B %d, %Y") # real date in "Month Day, Year"
+real_time_str = real_dt.strftime("%I:%M:%S %p") # real time in 12-hour AM/PM
+```
+This line is where I format into 12-hour time and pass it back to the model. 
 
 ## Installation
 
